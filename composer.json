@@ -1,5 +1,5 @@
 {
-    "name": "simpla-framework/container",
+    "name": "simpla-components/container",
     "description": "Container IoC of the Simpla Framework with implementation of Dependence Injection",
     "type": "library",
     "license": "MIT",
