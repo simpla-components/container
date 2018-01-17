@@ -1,0 +1,25 @@
+{
+    "name": "simpla-framework/container",
+    "description": "Container IoC of the Simpla Framework with implementation of Dependence Injection",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Robert Diego de Jesus",
+            "email": "robert.di.jesus@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9",
+        "xtreamwayz/pimple-container-interop": "^1.0",
+        "spatie/macroable": "^1.0"
+    }, 
+    "autoload": {
+    	"psr-4": {
+    	    "Simpla\\": "src/"
+    	} 
+    
+    }, 
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

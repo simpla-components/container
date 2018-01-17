@@ -1,0 +1,7 @@
+/app
+/bootstrap
+/nbproject
+/vendor
+OrganizacaoArquivos
+composer.local.json
+index.php
