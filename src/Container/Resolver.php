@@ -109,21 +109,18 @@ class Resolver {
         $parameters = [];
         
         $reflection = new ReflectionMethod($name, $method);
-          
+           
         foreach ($reflection->getParameters() as $key => $parameter) {
-            $class = $parameter->getClass();
-          
-
+            $class = $parameter->getClass(); 
+            
             if(!is_object($class)){
-                foreach ($param as $p) {
-                     $parameters[$parameter->name] = $p; 
-                }
+                $parameters[$parameter->name] = array_shift($param);
+                
                 continue;
             }          
-                $parameters[$parameter->name] = new $class->name; 
-       
+            $parameters[$parameter->name] = new $class->name;
         } 
-          
+         
         call_user_func_array([$name, $method], $parameters);
     }
 }
