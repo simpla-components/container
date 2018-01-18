@@ -104,7 +104,7 @@ class Resolver {
      * @param object $name 
      * @param string $method
      */
-    public function resolveMethods($name, $method)
+    public function resolveMethods($name, $method, array $param = [])
     {
         $parameters = [];
         
@@ -113,9 +113,17 @@ class Resolver {
         foreach ($reflection->getParameters() as $key => $parameter) {
             $class = $parameter->getClass();
           
-            $parameters[$parameter->name] = new $class->name; 
+
+            if(!is_object($class)){
+                foreach ($param as $p) {
+                     $parameters[$parameter->name] = $p; 
+                }
+                continue;
+            }          
+                $parameters[$parameter->name] = new $class->name; 
+       
         } 
-        
+          
         call_user_func_array([$name, $method], $parameters);
     }
 }
