@@ -465,7 +465,7 @@ class Container implements ContainerInterface, ArrayAccess
     */ 
     public function createAlias(array $aliases)
     {
-        $this->aliases = $aliases;
+        $this->aliases += $aliases;
         
         foreach ($aliases as $alias=>$class)
         {
@@ -482,6 +482,8 @@ class Container implements ContainerInterface, ArrayAccess
     */ 
     public function alias($alias, $class)
     {
+        $this->aliases[$alias] = $class;
+        
         class_alias($class, $alias);
     }       
     
