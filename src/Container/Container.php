@@ -497,4 +497,19 @@ class Container implements ContainerInterface, ArrayAccess
     {
         return is_null($name) ? $this->aliases : $this->aliases[$name];
     } 
+    
+    /**
+     * Show All Services in Container
+     * 
+     * @access public
+     * @return array
+     */
+    public function all()
+    {
+        foreach ($this->get() as $value) {
+            $tmp[$value] = $this->get($value);
+        }
+        
+        return $tmp;
+    }    
 }
