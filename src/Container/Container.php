@@ -16,10 +16,9 @@ namespace Simpla\Container;
 use Closure;
 use ArrayAccess;
 use ReflectionClass;
-use Xtreamwayz\Pimple\Container as Pimple;
 use Simpla\Contracts\ContainerInterface;
+use Xtreamwayz\Pimple\Container as Pimple;
 use Simpla\Contracts\ServiceProviderInterface;
-use Simpla\Contracts\ContainerProviderInterface;
 use Xtreamwayz\Pimple\Exception\NotFoundException;
 use Simpla\Exceptions\Container\MissingAliasesException;
 
@@ -43,7 +42,7 @@ class Container implements ContainerInterface, ArrayAccess
  
     protected $defer;
     
-    protected $aliases;
+    protected $aliases = [];
 
     private static $instance;
 
@@ -347,6 +346,10 @@ class Container implements ContainerInterface, ArrayAccess
     public function register(ServiceProviderInterface $serviceProvider)
     {
         $serviceProvider->register($this);
+         
+        if(method_exists($serviceProvider, 'boot')){
+            $serviceProvider->boot($this);
+        }         
     } 
     
     /**
@@ -367,7 +370,7 @@ class Container implements ContainerInterface, ArrayAccess
             $service->register($this); 
 
             if(method_exists($service, 'boot')){
-                $service->boot();
+                $service->boot($this);
             } 
         } 
     }
@@ -417,9 +420,17 @@ class Container implements ContainerInterface, ArrayAccess
         if(is_null($this->defer)){
             return false;
         }
+         
+        if(!$this->hasAlias($nameService)){
+            throw new NotFoundException("Alias \"{$nameService}\" not found");
+        }
         
         $serviceProvider = $this->getServiceProviderDefer($nameService);
-         
+          
+        if($serviceProvider == null){
+            throw new NotFoundException("Service Provider \"{$nameService}\" not found in deferred services");
+        } 
+ 
         $this->container[$serviceProvider] =  $this->container->factory(function()
                 use ($serviceProvider){
 
@@ -464,7 +475,7 @@ class Container implements ContainerInterface, ArrayAccess
     * @param array
     */ 
     public function createAlias(array $aliases)
-    {
+    { 
         $this->aliases += $aliases;
         
         foreach ($aliases as $alias=>$class)
@@ -497,6 +508,18 @@ class Container implements ContainerInterface, ArrayAccess
     {
         return is_null($name) ? $this->aliases : $this->aliases[$name];
     } 
+    
+    /**
+     * Check if alias name exists
+     * 
+     * @access public
+     * @param string $name alias name 
+     * @return boolean
+     */
+    public function hasAlias(string $name)
+    {
+        return isset($this->aliases[$name]);
+    }       
     
     /**
      * Show All Services in Container

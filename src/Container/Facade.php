@@ -34,7 +34,6 @@ class Facade implements FacadeInterface
             /* @var $app App */
             global $app;
             $service_name = static::createService();
-                    
             
             switch (count($arguments)) {
                     case 0:

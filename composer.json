@@ -10,9 +10,8 @@
         }
     ],
     "require": {
-        "php": ">=5.5.9",
-        "xtreamwayz/pimple-container-interop": "^1.0",
-        "spatie/macroable": "^1.0"
+        "php": ">=7.0.0",
+        "xtreamwayz/pimple-container-interop": "^1.0"
     }, 
     "autoload": {
     	"psr-4": {
