@@ -1,11 +1,37 @@
 # Simpla Framework
 
-## Container de Serviços
+####[Container de Serviços](#container) 
+#### [Serviço](#serviço)
+#### [Service Container](#service-conainer)
+###### [Estruturando um Projeto para Service Container](#estrutura)
+###### [Criando um Serviço Orientado a Interface](#interface)
+###### [Adicionando o Serviço no Container](#add-container)
+###### [Make](#make)
+###### [Array](#array)
+###### [Singleton](#singleton)
+###### [Recuperando um Serviço](#recuperar)
+##### [Adicionando Dados aos Container](#add-dados)
+###### [Chamada de Serviços (injeção de dependência)](#injeacao)
+###### [Adicionando Interface](#add-interface)
+###### [Adicionando Closures](#add-closure)
+###### [Obtendo a função de criação de serviço](#func-servico)
+###### [Modificando Serviços após Definição](#mod-services)
+#### [Service Provider](#service-provider)
+##### [O método Register](#register)
+##### [O método Boot](#boot)
+#### [Bootstrap](#bootstrap)
+##### [Opção Defer](#defer)
+#### [Facades](#facades)
+###### [Como as facades funcionam](#como-facades)
+
+
+
+## <a name="container">Container de Serviços</a>
 
 O conceito de Container de Serviços está intrissecamente relacionado com objetos e, logicamente à Programação Orientada a Objetos (POO). De fato, todo serviço pode ser um objeto mas, nem todo objeto será um serviço. 
 Uma aplicação modernas temos diversos objetos ou conjunto de objetos, cada um com uma função específica. Assim, temos objetos que nos ajudam a enviar um e-mail, acessar e registrar informações em bancos de dedos, etc. Mas, o que é um serviço?
 
-## Serviço
+## <a name="serviço">Serviço</a>
 
 A [documentação do Symfony](http://andreiabohner.org/documentacao-do-symfony/3.1/service_container.html#o-que-e-um-servico) define um serviço de uma forma bastante clara:
 
@@ -15,7 +41,7 @@ Um Serviço é qualquer objeto PHP que realiza algum tipo de tarefa “global”
 
 Este conceito está presente na [arquitetura orientada a serviços](https://en.wikipedia.org/wiki/Service-oriented_architecture) onde cada "serviço" pode ser acessado e utilizado facilmente, sem interferir no funcionamento de outro serviço ou da aplicação.
 
-## Service Container
+## <a name="service-conainer">Service Container</a>
 
 Um Container de Serviço é um objeto PHP responsável pelo gerenciamento e o instanciamento de serviços (objetos ou outros elementos). 
 
@@ -23,7 +49,7 @@ Diversos Frameworks, como Laravel, Zend, Symfony, Silex e Slim também implement
 
 O Simpla utiliza como base o Pimple, Service Container desenvolvido e mantido pela Symfony e utilizado pelo Silex, sendo que é utilizada a versão que implementa a [PSR11](https://www.php-fig.org/psr/psr-11/) .
 
-### Estruturando um Projeto para Service Container
+### <a name="estrutura">Estruturando um Projeto para Service Container</a>
 
 Neste exemplo iremos criar uma estrutura padrão para utilização de um service container. Essa é a mesma estrutura utilizada pelo Simpla Framework, porém vamos nos ater ao exemplo abaixo.
 
@@ -45,7 +71,7 @@ Neste exemplo iremos criar uma estrutura padrão para utilização de um service
         |
         |__index.php
 
-### Criando um Serviço Orientado a Interface
+### <a name="interface">Criando um Serviço Orientado a Interface</a>
 
 Um serviço nada mais é que um objeto, e objeto é definido em uma classe. Porém, antes de construírmos uma classe podemos definir uma inteface para o objeto.
 
@@ -102,13 +128,13 @@ Assim, vamos implementar a Interface:
     }
 ```
 
-### Adicionando o Serviço no Container
+### <a name="add-container">Adicionando o Serviço no Container</a>
 
 Uma vez definido o serviço podemos usá-lo simplimente com `$calc = new Calculator()`. Porém, às vezes isso pode não ser funcional do ponto de vista do gerenciamento da aplicação. Quantos objetos instanciados existem na aplicação? Devemos definir os serviços como Singleton? 
 
 Para simplificar o gerencimento dos objetos podemos fazer o uso do Container de Serviço utilizando as opções a seguir:
 
-#### Make
+#### <a name="make">Make</a>
 
 Vamos carregar em nosso arquivo index.php o Container do Simpla e "injetar" o container do Pimple, conforme a seguir:
 
@@ -177,7 +203,7 @@ Se não quisermos definir um nome para o serviço, podemos simplesmente informar
 A desvantagem nesta opção é a necessidade de informar `\App\Classes\Calculator::class` como nome do serviço, o que pode ser um pouco cansativo.
  
 
-#### Array
+#### <a name="array">Array</a>
 
 Por implementar a interface `ArrayAccess` o Simpla Container permite que possamos adicionar um serviço da mesmo forma que adicionamos valores em um array:
 
@@ -194,7 +220,7 @@ Por implementar a interface `ArrayAccess` o Simpla Container permite que possamo
 ```
 
 
-#### Singleton
+#### <a name="singleton">Singleton</a>
 
 
 Utilizando o método `singleton` garantimos que apenas uma única instância (objeto) de uma classe exista.
@@ -229,8 +255,7 @@ Uma característica do Pimple, que se aplica nesta situação é a adição de s
 ```
 
 
-
-#### Recuperando um Serviço
+#### <a name="recuperar">Recuperando um Serviço</a>
 
 Os serviços podem ser recuperados pelo método `get`.
 
@@ -255,7 +280,7 @@ Tembém podemos recuperar um serviço com se este fosse um array:
 ```
 
 
-### Adicionando Dados aos Container
+### <a name="add-dados">Adicionando Dados aos Container</a>
 
 O Container também pode conter qualquer outro tipo de informação que não seja um objeto. Isso é extremamente útil para incluir informações que possam ser utilizadas globalmente na aplicação.
 
@@ -268,7 +293,7 @@ O Container também pode conter qualquer outro tipo de informação que não sej
 
 ```
 
-#### Chamada de Serviços (injeção de dependência)
+#### <a name="injeacao">Chamada de Serviços (injeção de dependência)</a>
 
 O método `call` permite chamar um método de um serviço pré-definido com a sintaxe "service@method", passando um array com todos os parâmetros.
 
@@ -279,7 +304,7 @@ O método `call` permite chamar um método de um serviço pré-definido com a si
 ```
 Desta forma estamos injetando uma dependência em um método de um serviço.
  
-### Adicionando Interface
+### <a name="add-interface">Adicionando Interface</a>
 
 Podemos definir um serviço com o nome de sua interface.
 
@@ -310,7 +335,7 @@ Para simplificar podemos estabelecer uma **tag** para aquela interface, como se 
 
 ```
 
-#### Adicionando Closures
+#### <a name="add-closure">Adicionando Closures</a>
 
 Podemos adicionar closures no container como serviços.
 
@@ -328,7 +353,7 @@ Podemos adicionar closures no container como serviços.
 ```
 
 
-#### Obtendo a função de criação de serviço
+#### <a name="func-servico">Obtendo a função de criação de serviço</a>
 
 Quando você acessa um objeto, o Pimple chama automaticamente a função anônima que você definiu, o que cria o objeto de serviço para você. Se você quiser obter acesso bruto a esta função, você pode usar o método `raw()`:
 
@@ -343,7 +368,7 @@ Quando você acessa um objeto, o Pimple chama automaticamente a função anônim
 Desta forma `$calc` obteve uma função anônima contendo a implementação do serviço **calc**. Ao chamarmos `$calc` como uma função, o serviço é criado (é criado o objeto).
 
 
-#### Modificando Serviços após Definição
+#### <a name="mod-services">Modificando Serviços após Definição</a>
 
 
 Em alguns casos você pode querer modificar uma definição de serviço depois de ter sido definido. Você pode usar o método `extend()`  para definir código adicional para ser executado em seu serviço logo após ele é criado:
@@ -403,7 +428,7 @@ Em alguns casos você pode querer modificar uma definição de serviço depois d
 O primeiro argumento é o nome do serviço para estender, a segunda uma função que obtém acesso à instância do objeto e do recipiente.
 
 
-## Service Provider
+## <a name="service-provider">Service Provider</a>
 
 Em um tradução direta um Service provider é um *Provedor de Serviço*, ou seja:
 **Provedor**: O que provê algo. 
@@ -430,14 +455,14 @@ class TodayServiceProvider implements ServiceProviderInterface
     		$tz = new \DateTimeZone("America/Sao_Paulo");
     		
         	$serviceContainer->make("today", function(){
-	        	   return  new DateTime("now);
+	        	   return  new DateTime("now");
         	});         
     	} 
 }
  
 ```
- 
-### O método Register
+
+### <a name="register">O método Register</a>
 
  Perceba que nosso Service Provider foi criado com o nome de **TodayServiceProvider** e conta com o método de registro (register), onde definimos nosso serviço.
  
@@ -500,7 +525,7 @@ Este provider foi criado mas, só pode ser utilizado quando o adicionarmos ao no
 
 Isso pode ser dispendioso se pensarmos que teremos de adicionar todos os Services Providers no container, mas veremos  o quão prático torna-se essa metodologia quando utilizamos um [Bootstrap](#bootstrap).
 
-### O método Boot
+### <a name="boot">O método Boot</a>
 
 Podemos ainda, adicionar um método `boot` no Service Provider. Este método é chamado depois que todos os serviços foram registrados, permitindo acessar todos os serviços que foram inicializados antes deste.
 
@@ -562,7 +587,6 @@ Para que possamos criar nossos serviços de uma forma mais automatizada podemos 
 
 Adotando a estrutura acima, podemos definir em um array no arquivo `providers.php` todos os serviços que desejamos chamar:
 
-<a name="bootstrap-facade"></a>
 ```php
 <?php
 
@@ -604,7 +628,7 @@ Podemos ainda definir no arquivo `bootstrap.php` o nosso container:
  
  Podemos carregar nosso arquivo `bootstrap.php` em uma **index.php** e utilizar todos os serviços disponíveis. 
 
-### Opção Defer
+### <a name="defer">Opção Defer</a>
 
 A opção defer (deferred/adiado) faz com que o Service Provider só seja registrado no momento em que se precisa dele. Ou seja, o container somente registra o serviço quando ele é chamado.
 
@@ -637,23 +661,60 @@ class CalculatorServiceProvider implements ServiceProviderInterface
 	    }
 }
 ```
-
-
+ 
 ## <a name="facades" class="item-1">Facades</a>
 
 As Facades do **Simpla** são bem parecidas com as Facades do framework Laravel.
 
 As Facades neste contexto permitem que tenhamos acesso aos serviços de forma simplificada, como se estes fossem classes com métodos estáticos. Isso não quer dizer que os serviços sejam estáticos de verdade, a facade cria uma nova forma de acessar um serviço, uma "fachada".
 
-### Como as facades funcionam
+### <a name="como-facades">Como as facades funcionam</a>
 
-Para que as facades funcionem precisamos defini-las e adiciona-las em nosso arquivo de [bootstrap](#bootstrap-facade). 
+Para que as facades funcionem precisamos defini-las e adiciona-las em nosso arquivo de bootstrap.
 
-https://code.tutsplus.com/pt/tutorials/design-patterns-the-facade-pattern--cms-22238
+```php
+<?php
 
-https://medium.com/by-vinicius-reis/por-que-facades-%C3%A9-um-problema-seu-e-n%C3%A3o-do-laravel-8672bb80c74c
+    $providers = [
+    				   App\Providers\CalculatorServiceProvider::class,
+                       App\Providers\CarServiceProvider::class,
+                       App\Providers\HelloServiceProvider::class
+                   ];
+                   
+	 $aliases = [
+	     'calc' => App\Facades\CalculatorFacade::class,
+	     'hello' => App\Facades\HelloFacade::class,
+	     'car' => \App\Facades\CarServiceProvider::class
+	 ];
 
+```
 
-## Macros
+a variável `$aliases` é responsável por armazenar o apelido para nossas facades. 
 
-https://github.com/spatie/macroable 
+Para cada serviço devemos criar um arquivo de facade que, em nossa estrutura foi adicionado em `App\Facades`, conforme definido no exemplo a seguir:
+
+```php
+// CalculatorFacade.php
+
+namespace App\Facades;                  
+ 
+class CalculatorFacade extends Simpla\Container\Facade
+{
+    public static function createService()
+    {
+        return 'calc';
+    }
+}
+```
+
+Desta forma podemos chamar o serviço `Calculator` como:
+
+```php
+	use App\Facades\CalculatorFacade;
+
+	calc::sum(43,21); // 63
+```
+
+O nome definido no método `createService()` e no arquivo de *bootstrap* devem coincidir, caso contrário um `NotFoundException` será lançada.
+ 
+  
