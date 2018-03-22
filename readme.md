@@ -1,6 +1,6 @@
 # Simpla Framework
 
-* [Container de Serviços](#container) 
+* **[Container de Serviços](#container)** 
 	* [Serviço](#serviço)
 	* [Service Container](#service-conainer)
 	* [Estruturando um Projeto para Service Container](#estrutura)
@@ -16,14 +16,15 @@
 	* [Adicionando Closures](#add-closure)
 	* [Obtendo a função de criação de serviço](#func-servico)
 	* [Modificando Serviços após Definição](#mod-services)
-* [Service Provider](#service-provider)
+* **[Service Provider](#service-provider)**
 	* [O método Register](#register)
 	* [O método Boot](#boot)
 	* [Bootstrap](#bootstrap)
 	* [Opção Defer](#defer)
-* [Facades](#facades)
+* **[Facades](#facades)**
 	* [Como as facades funcionam](#como-facades)
 
+------
 
 
 ## <a name="container">Container de Serviços</a>
@@ -591,7 +592,7 @@ Adotando a estrutura acima, podemos definir em um array no arquivo `providers.ph
 <?php
 
     $providers = [
-    				   App\Providers\CalculatorServiceProvider::class,
+    			App\Providers\CalculatorServiceProvider::class,
                        App\Providers\CarServiceProvider::class,
                        App\Providers\HelloServiceProvider::class
                    ];
@@ -676,7 +677,7 @@ Para que as facades funcionem precisamos defini-las e adiciona-las em nosso arqu
 <?php
 
     $providers = [
-    				   App\Providers\CalculatorServiceProvider::class,
+   			App\Providers\CalculatorServiceProvider::class,
                        App\Providers\CarServiceProvider::class,
                        App\Providers\HelloServiceProvider::class
                    ];
